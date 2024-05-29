@@ -11,22 +11,39 @@ export default function Navbar() {
           </Link>
         </div>
         <div className="actions flex justify-center basis-3/5 gap-7 text-2xl">
-          <Link to="/">
+          <Link to="/" className="hover:underline hover:underline-offset-4">
             <div>Trang chủ</div>
           </Link>
-          <Link to="/Depot">
+          <Link
+            to="/Depot"
+            className="hover:underline hover:underline-offset-4"
+          >
             <div>Kho</div>
           </Link>
-          <Link to="/Register">
+          <Link
+            to="/Register"
+            className="hover:underline hover:underline-offset-4"
+          >
             <div>Đăng ký vật dụng</div>
           </Link>
-          <Link to="/Listregister">
+          <Link
+            to="/Listregister"
+            className="hover:underline hover:underline-offset-4"
+          >
             <div>Danh sách đăng ký</div>
           </Link>
         </div>
         <div className="icons basis-1/5 text-center text-2xl">
-            <button className="mr-5 bg-blue-500 py-4 px-10 rounded-xl font-semibold">Đăng nhập</button>
-            <button className="bg-blue-500 py-4 px-10 rounded-xl font-semibold">Đăng ký</button>
+          <Link to="/Signin">
+            <button className="mr-5 bg-blue-500 py-4 px-10 rounded-xl font-semibold">
+              Đăng nhập
+            </button>
+          </Link>
+          <Link to="/Signup">
+            <button className="bg-blue-500 py-4 px-10 rounded-xl font-semibold">
+              Đăng ký
+            </button>
+          </Link>
         </div>
       </nav>
     </div>
