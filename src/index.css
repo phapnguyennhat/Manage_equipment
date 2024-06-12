@@ -1,8 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 
-*{
+* {
   font-family: "Inter", sans-serif;
+}
+
+@layer components {
+  .btn-filter {
+    @apply cursor-pointer rounded-[5rem] border-2 border-[#c1c1c1] px-6 py-4 transition duration-300 hover:border-[#282828];
+  }
+  .item-filter {
+    @apply border-b-2 px-11 py-6;
+  }
 }

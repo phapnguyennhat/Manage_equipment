@@ -1,11 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './public/**/*.html',
-    './src/**/*.{js,jsx,ts,tsx,vue}',
-  ],
+  content: ["./public/**/*.html", "./src/**/*.{js,jsx,ts,tsx,vue}"],
   theme: {
-    extend: {},
+    extend: {
+      backgroundColor: {
+        modal: " rgba(0, 0, 0, 0.4)",
+      },
+    },
   },
   plugins: [],
-}
+};
