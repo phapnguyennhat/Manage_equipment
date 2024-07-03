@@ -13,42 +13,63 @@ const dataStock = [
     title: "Dầu thơm",
     timeBorrow: "7 Ngày",
     category: "Khác",
+    compensate: "$18",
+    description:
+      "Designed for simplicity and made from high-quality materials. Its clean lines and material combinations creates a modern custom look suitable for any space.",
   },
   {
     src: "/assets/imgs/Depot/product-ceramic-flower-pot-2-400x500.jpg",
     title: "Bình hoa",
     timeBorrow: "7 Ngày",
     category: "Đồ trang trí",
+    compensate: "$26",
+    description:
+      "Designed for simplicity and made from high-quality materials. Its clean lines and material combinations creates a modern custom look suitable for any space.",
   },
   {
     src: "/assets/imgs/Depot/product-eco-lotion-2-400x500.jpg",
     title: "Nước rửa tay",
     timeBorrow: "7 Ngày",
     category: "Khác",
+    compensate: "$12",
+    description:
+      "Designed for simplicity and made from high-quality materials. Its clean lines and material combinations creates a modern custom look suitable for any space.",
   },
   {
     src: "/assets/imgs/Depot/product-formed-chair-2-400x500.jpg",
     title: "Ghế ngồi",
     timeBorrow: "7 Ngày",
     category: "Vật dụng sự kiện",
+    compensate: "$268",
+    description:
+      "Designed for simplicity and made from high-quality materials, its clean lines and modern look is suitable for any space.",
   },
   {
     src: "/assets/imgs/Depot/product-framed-leafs-artwork-2-400x500.jpg",
     title: "Tranh hình lá",
     timeBorrow: "7 Ngày",
     category: "Đồ trang trí",
+    compensate: "$36",
+    description:
+      "Designed for simplicity and made from high-quality materials. Its clean lines and material combinations creates a modern custom look suitable for any space.",
   },
   {
     src: "/assets/imgs/Depot/product-framed-plant-artwork-400x500.jpg",
     title: "Tranh hình cây",
     timeBorrow: "7 Ngày",
     category: "Đồ trang trí",
+    compensate: "$39",
+    description:
+      "Designed for simplicity and made from high-quality materials. Its clean lines and material combinations creates a modern custom look suitable for any space.",
   },
   {
     src: "/assets/imgs/Depot/product-framed-single-leaf-artwork-2-400x500.jpg",
     title: "Tranh hình lá",
     timeBorrow: "7 Ngày",
     category: "Đồ trang trí",
+    compensate: "$39",
+    description:
+      "A WooCommerce grouped product is a type of product that allows you to group multiple individual products together and sell them as a package or bundle.",
   },
   {
     src: "/assets/imgs/Depot/product-hand-cream-2-400x500.jpg",

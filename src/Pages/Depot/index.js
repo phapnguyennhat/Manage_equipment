@@ -2,13 +2,20 @@ import classNames from "classnames/bind";
 import styles from "./Depot.module.scss";
 import { FaChevronDown } from "react-icons/fa6";
 import { IoFilterOutline } from "react-icons/io5";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StockCard from "./StockCard";
 import Footer from "~/Components/Footer";
 import Filter from "./Filter";
 import dataStock from "~/constant/depotConstant";
+import { profile } from "~/api/authAPI";
+import CreateEquip from "~/Components/CreateEquip";
+import { useLocation } from "react-router-dom";
+import { getAll } from "~/api/equipAPI";
 
 const cx = classNames.bind(styles);
+const useQuery = () => {
+  return new URLSearchParams(useLocation().search);
+};
 
 export default function Depot() {
   const [displayFilter, setDisplayFilter] = useState(false);
@@ -19,10 +26,28 @@ export default function Depot() {
     isOpenColor: false,
     isOpenStock: false,
   });
+  const [data, setData] = useState([]);
+  const query = useQuery();
+  const page = +query.get("page");
+  const limit = +query.get("limit");
+  const status = query.get("status");
+  const cate = query.get("cate");
+
+  const [displayForm, setDisplayForm] = useState(false);
+
   const handleAside = () => setDisplayAside(!displayAside);
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      profile().then((res) => setUser(res.data));
+    }
+    getAll(page, limit, status, cate).then((res) => {
+      setData(res.data.data);
+    });
+  }, []);
 
   return (
-    <div className="px-[60px]">
+    <div className="px-6 md:px-[45px]">
       {displayAside && (
         <Filter
           displayAside={displayAside}
@@ -101,10 +126,19 @@ export default function Depot() {
         >
           Filter <IoFilterOutline />
         </button>
-        <div>23 Products</div>
+        {user?.role !== "admin" ? (
+          <div>23 Products</div>
+        ) : (
+          <button
+            onClick={() => setDisplayForm(true)}
+            className="rounded-md bg-blue-300 p-4"
+          >
+            Thêm Vật Dụng
+          </button>
+        )}
       </div>
-      <div className="grid grid-cols-2 gap-x-10 gap-y-2 md:grid-cols-3 lg:grid-cols-4">
-        {dataStock.map((product, index) => (
+      <div className="grid min-h-screen grid-cols-2 gap-x-10 gap-y-2 md:grid-cols-3 lg:grid-cols-4">
+        {data.map((product, index) => (
           <StockCard product={product} key={index} />
         ))}
       </div>
@@ -112,6 +146,7 @@ export default function Depot() {
         Hiển thị 1-16 của 28 sản phẩm
         <button className="btn-filter mx-auto w-[200px]">Hiển thị thêm</button>
       </div>
+      <CreateEquip setDisplayForm={setDisplayForm} display={displayForm} />
       <Footer />
     </div>
   );

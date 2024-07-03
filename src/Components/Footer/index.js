@@ -5,20 +5,20 @@ const cx = classNames.bind(styles);
 
 export default function Footer() {
   return (
-    <div className="Footer w-full my-10">
-      <div className="flex flex-row gap-14">
+    <div className="Footer my-10 w-full">
+      <div className="flex-row gap-14 lg:flex">
         <div className="left basis-1/4">
-          <span className="text-[#9db7f0] text-5xl font-semibold">DH</span>
-          <span className="text-[#3ea6f1] text-5xl font-semibold">Store</span>
-          <p className="mt-10 my-auto">
+          <span className="text-5xl font-semibold text-[#9db7f0]">DH</span>
+          <span className="text-5xl font-semibold text-[#3ea6f1]">Store</span>
+          <p className="my-auto mt-3 md:mt-10">
             Nơi để mọi người có thể mượn vật dụng khi cần tổ chức sự kiện.
           </p>
         </div>
-        <div className="mid basis-2/4">
-          <p className="font-medium text-3xl mb-5">Thông tin liên hệ</p>
-          <div className="address flex gap-5 mb-3">
+        <div className="mid my-4 basis-2/4">
+          <p className="mb-5 text-3xl font-medium">Thông tin liên hệ</p>
+          <div className="address mb-3 flex gap-5">
             <svg
-              class="svg-inline--fa fa-map-marker-alt fa-w-12 h-8 mr-4"
+              class="svg-inline--fa fa-map-marker-alt fa-w-12 mr-4 h-8"
               aria-hidden="true"
               data-prefix="fas"
               data-icon="map-marker-alt"
@@ -37,7 +37,7 @@ export default function Footer() {
               Hòa, thành phố Dĩ An, tỉnh Bình Dương.
             </span>
           </div>
-          <div className="email flex gap-5 mb-3">
+          <div className="email mb-3 flex gap-5">
             <svg
               class="svg-inline--fa fa-envelope fa-w-16 h-8"
               aria-hidden="true"
@@ -75,11 +75,17 @@ export default function Footer() {
           </div>
         </div>
         <div className="right basis-1/4">
-          <p className="font-medium text-3xl mb-10 text-center">Theo dõi chúng tôi</p>
-          <div className="icons flex justify-center gap-5">
-            <a className="" href="https://www.facebook.com/BKCSE.Multimedia" target="_blank">
+          <p className="mb-10 text-center text-3xl font-medium md:text-left lg:text-center">
+            Theo dõi chúng tôi
+          </p>
+          <div className="icons flex justify-center gap-5 md:justify-start lg:justify-center">
+            <a
+              className=""
+              href="https://www.facebook.com/BKCSE.Multimedia"
+              // target="_blank"
+            >
               <svg
-                class="svg-inline--fa fa-facebook fa-w-14 h-16 mt-[4.5px]"
+                class="svg-inline--fa fa-facebook fa-w-14 mt-[4.5px] h-16"
                 aria-hidden="true"
                 data-prefix="fab"
                 data-icon="facebook"
@@ -96,12 +102,14 @@ export default function Footer() {
             </a>
             <a
               href="https://www.tiktok.com/@csemultimedia?is_from_webapp=1&sender_device=pc"
-              target="_blank"
+              // target="_blank"
               className=""
             >
               <img
-               className="h-[50px]"
-               src="https://img.icons8.com/?size=100&id=K6KK5ISTAWwE&format=png&color=000000"></img>
+                className="h-[50px]"
+                src="https://img.icons8.com/?size=100&id=K6KK5ISTAWwE&format=png&color=000000"
+                alt="not found"
+              ></img>
             </a>
           </div>
         </div>

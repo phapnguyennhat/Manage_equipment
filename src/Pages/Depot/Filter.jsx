@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { VscChromeClose } from "react-icons/vsc";
 import { FaAngleDown } from "react-icons/fa6";
+import { profile } from "~/api/authAPI";
 
 const Filter = ({
   displayAside,
@@ -10,7 +11,7 @@ const Filter = ({
 }) => {
   return (
     <div className="fixed bottom-0 left-0 right-0 top-0 z-10 flex bg-modal">
-      <div className={"w-[420px] bg-white"}>
+      <div className={"w-[420px] overflow-scroll overflow-x-hidden bg-white"}>
         <div className="border-b-2 px-11">
           <div
             onClick={() => {

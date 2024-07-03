@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 const StockCard = ({ product }) => {
   const navigate = useNavigate();
-  console.log(product);
   return (
     <div
       onClick={() => {
@@ -11,7 +10,7 @@ const StockCard = ({ product }) => {
       }}
       className="group/item transition duration-500"
     >
-      <img src={product.src} alt="not found" className="w-full" />
+      <img src={product.urlImg} alt="not found" className="w-full" />
       <div className="my-7 inline-block text-3xl font-medium hover:underline">
         {product.title}
       </div>

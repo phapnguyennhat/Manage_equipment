@@ -42,23 +42,23 @@ export default function Home() {
   }, []);
 
   return (
-    <div className={cx("max-w-screen-2xl mx-auto px-[60px]")}>
+    <div className={cx("mx-auto max-w-screen-2xl px-6 md:px-[45px]")}>
       <div
         className={cx(
           "mainimg",
-          "w-full bg-center bg-cover h-[730px] rounded-lg"
+          "h-[730px] w-full rounded-lg bg-cover bg-center",
         )}
       >
-        <div className="unit flex pt-8 ml-7">
-          <div className="img w-64 mr-10">
+        <div className="unit ml-7 flex pt-8">
+          <div className="img mr-10 w-64">
             <img
-              className="w-full h-full object-contain"
+              className="h-full w-full object-contain"
               alt=""
               src={LogoDoan}
             ></img>
           </div>
           <div className="name">
-            <h4 className="uppercase text-yellow-100 text-lg text-center">
+            <h4 className="text-center text-lg uppercase text-yellow-100">
               trường đại học bách khoa - tphcm
             </h4>
             <h3 className="uppercase text-white">
@@ -66,46 +66,48 @@ export default function Home() {
             </h3>
           </div>
         </div>
-        <div className="title w-full mx-auto text-white pt-96">
-          <h1 className="text-center uppercase text-7xl">
+        <div className="title mx-auto w-full pt-96 text-white">
+          <h1 className="text-center text-7xl uppercase">
             website quản lý vật dụng đoàn - hội
           </h1>
-          <i className="text-center block font-normal mt-8">
+          <i className="mt-8 block text-center font-normal">
             "Nhanh gọn, tiện lợi"
           </i>
           <Link className="block text-center uppercase" to="/Depot">
-            <button className="bg-white px-10 py-5 rounded-2xl text-black mt-8 text-3xl">
+            <button className="mt-8 rounded-2xl bg-white px-10 py-5 text-3xl text-black">
               Khám phá ngay
             </button>
           </Link>
         </div>
       </div>
-      <div className="trend w-full mx-auto mt-24 text-5xl h-fit">
+      <div className="trend mx-auto mt-24 h-fit w-full text-5xl">
         <h2 className="text-center font-light">Nổi bật</h2>
-        <div className="product grid grid-cols-4 gap-8 pt-24">
+        <div className="product grid gap-8 pt-24 md:grid-cols-2 lg:grid-cols-4">
           {ListProduct.map((pro, index) => {
             return (
-              <div className={cx("trendingpro group-last:hover:block")}>
+              <div
+                className={cx("trendingpro col-span-1 group-last:hover:block")}
+              >
                 <img
                   src={pro}
                   alt=""
-                  className="w-full h-full rounded-lg object-cover"
+                  className="w-full rounded-lg object-cover"
                 ></img>
-                <span className="block text-red-600 text-xl font-semibold pt-5">
+                <span className="block pt-5 text-xl font-semibold text-red-600">
                   Nổi bật
                 </span>
-                <h3 className="text-4xl pt-5">
+                <h3 className="pt-5 text-4xl">
                   {index === 0
                     ? "Loa Lớn"
                     : index === 1
-                    ? "Bàn Gỗ"
-                    : index === 2
-                    ? "Ghế Đơn"
-                    : "Khăn Trải Bàn"}
+                      ? "Bàn Gỗ"
+                      : index === 2
+                        ? "Ghế Đơn"
+                        : "Khăn Trải Bàn"}
                 </h3>
                 <span
                   className={cx(
-                    "addpro pt-3 text-2xl underline cursor-pointer block italic"
+                    "addpro block cursor-pointer pt-3 text-2xl italic underline",
                   )}
                 >
                   Thêm sản phẩm
@@ -115,18 +117,19 @@ export default function Home() {
           })}
         </div>
       </div>
-      <div className="says w-full h-fit py-24 px-48 bg-gray-100 mt-60 rounded-xl">
+      <div className="says mt-60 h-fit w-full rounded-xl bg-gray-100 px-12 py-24 md:px-32 lg:px-48">
         <div className="person flex">
           <img
             src={SomeSays[idx].picture}
-            className="rounded-full object-contain w-24 h-24"
+            className="h-24 w-24 rounded-full object-contain"
+            alt="not found"
           ></img>
-          <span className="block font-semibold ml-12 text-3xl">
+          <span className="ml-12 block text-3xl font-semibold">
             {SomeSays[idx].name}
           </span>
         </div>
         <div className="say pt-12">
-          <span className="block text-4xl font-normal font-serif">
+          <span className="block font-serif text-4xl font-normal">
             {SomeSays[idx].say}
           </span>
         </div>
