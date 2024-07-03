@@ -18,7 +18,7 @@ export default function Footer() {
           <p className="mb-5 text-3xl font-medium">Thông tin liên hệ</p>
           <div className="address mb-3 flex gap-5">
             <svg
-              class="svg-inline--fa fa-map-marker-alt fa-w-12 mr-4 h-8"
+              className="svg-inline--fa fa-map-marker-alt fa-w-12 mr-4 h-8"
               aria-hidden="true"
               data-prefix="fas"
               data-icon="map-marker-alt"
@@ -39,7 +39,7 @@ export default function Footer() {
           </div>
           <div className="email mb-3 flex gap-5">
             <svg
-              class="svg-inline--fa fa-envelope fa-w-16 h-8"
+              className="svg-inline--fa fa-envelope fa-w-16 h-8"
               aria-hidden="true"
               data-prefix="far"
               data-icon="envelope"
@@ -57,7 +57,7 @@ export default function Footer() {
           </div>
           <div className="website flex gap-5">
             <svg
-              class="svg-inline--fa fa-globe-asia fa-w-16 h-8"
+              className="svg-inline--fa fa-globe-asia fa-w-16 h-8"
               aria-hidden="true"
               data-prefix="fas"
               data-icon="globe-asia"
@@ -85,7 +85,7 @@ export default function Footer() {
               // target="_blank"
             >
               <svg
-                class="svg-inline--fa fa-facebook fa-w-14 mt-[4.5px] h-16"
+                className="svg-inline--fa fa-facebook fa-w-14 mt-[4.5px] h-16"
                 aria-hidden="true"
                 data-prefix="fab"
                 data-icon="facebook"

@@ -6,11 +6,11 @@ import { useEffect, useState } from "react";
 import StockCard from "./StockCard";
 import Footer from "~/Components/Footer";
 import Filter from "./Filter";
-import dataStock from "~/constant/depotConstant";
 import { profile } from "~/api/authAPI";
 import CreateEquip from "~/Components/CreateEquip";
 import { useLocation } from "react-router-dom";
 import { getAll } from "~/api/equipAPI";
+import Pagination from "~/Components/Pagination";
 
 const cx = classNames.bind(styles);
 const useQuery = () => {
@@ -27,9 +27,10 @@ export default function Depot() {
     isOpenStock: false,
   });
   const [data, setData] = useState([]);
+  const [count, setCount] = useState(null);
   const query = useQuery();
   const page = +query.get("page");
-  const limit = +query.get("limit");
+
   const status = query.get("status");
   const cate = query.get("cate");
 
@@ -41,10 +42,12 @@ export default function Depot() {
     if (localStorage.getItem("token")) {
       profile().then((res) => setUser(res.data));
     }
-    getAll(page, limit, status, cate).then((res) => {
+    getAll(page, status, cate).then((res) => {
       setData(res.data.data);
+      setCount(res.data.count);
     });
-  }, []);
+    // window.scrollTo(0, 0);
+  }, [page, status, cate]);
 
   return (
     <div className="px-6 md:px-[45px]">
@@ -127,7 +130,7 @@ export default function Depot() {
           Filter <IoFilterOutline />
         </button>
         {user?.role !== "admin" ? (
-          <div>23 Products</div>
+          <div>{count} Products</div>
         ) : (
           <button
             onClick={() => setDisplayForm(true)}
@@ -142,10 +145,12 @@ export default function Depot() {
           <StockCard product={product} key={index} />
         ))}
       </div>
-      <div className="flex flex-col text-center">
-        Hiển thị 1-16 của 28 sản phẩm
+      {/* <div className="flex flex-col text-center">
+        Hiển thị 1-12 của 28 sản phẩm
         <button className="btn-filter mx-auto w-[200px]">Hiển thị thêm</button>
-      </div>
+      </div> */}
+      <Pagination count={count} limit={12} />
+
       <CreateEquip setDisplayForm={setDisplayForm} display={displayForm} />
       <Footer />
     </div>

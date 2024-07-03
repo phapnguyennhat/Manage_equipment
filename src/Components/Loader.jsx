@@ -10,7 +10,7 @@ const Loader = () => {
         role="status"
         aria-label="loading"
       >
-        <span class="sr-only">Loading...</span>
+        <span className="sr-only">Loading...</span>
       </div>
     </div>
   );

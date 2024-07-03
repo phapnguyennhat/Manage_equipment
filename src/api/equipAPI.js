@@ -14,8 +14,8 @@ export const createEquip = async (form) => {
   console.log("success");
 };
 
-export const getAll = async (page, limit, status, cate) => {
-  let url = `equipment?page=${page}&limit=${limit}`;
+export const getAll = async (page, status, cate) => {
+  let url = `equipment?page=${page}`;
   if (status) url = url + `&status=${status}`;
   if (cate) url = url + `&cate=${cate}`;
   const response = instance.get(url);
