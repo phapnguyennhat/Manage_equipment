@@ -33,7 +33,7 @@ export default function SignIn() {
       {error ? (
         <p className="absolute left-[15%] top-[21%] mx-auto my-2 w-[70%] rounded-md bg-red-400 p-3">
           {" "}
-          {error}{" "}
+          {error[0]}{" "}
         </p>
       ) : null}
       <div className="user mx-auto flex w-[70%] border-b-2 pb-5">

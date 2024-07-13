@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { FiAlignJustify } from "react-icons/fi";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { IoIosLogOut } from "react-icons/io";
 import { IoHomeSharp } from "react-icons/io5";
 import { FiBox } from "react-icons/fi";
@@ -8,16 +8,23 @@ import { FiEdit3 } from "react-icons/fi";
 import { CiViewList } from "react-icons/ci";
 import { FaCaretRight } from "react-icons/fa6";
 import { logOut, profile } from "~/api/authAPI";
+import { FiShoppingCart } from "react-icons/fi";
 
-export default function Navbar() {
+function Navbar() {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [displayNav, setDisplayNav] = useState(false);
   const [nav2, setNav2] = useState(false);
   const navigate = useNavigate();
   const [user, setUser] = useState({});
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      profile().then((res) => setUser(res.data));
+    try {
+      if (localStorage.getItem("token")) {
+        // console.log(localStorage.getItem("token"));
+        profile().then((res) => setUser(res ? res.data : ""));
+      }
+    } catch (err) {
+      logOut();
+      navigate("signin");
     }
   }, []);
 
@@ -68,20 +75,35 @@ export default function Navbar() {
           </Link>
         </div>
         <div
-          onClick={() => setDisplayMenu(!displayMenu)}
           className={`relative hidden basis-1/5 items-center justify-center gap-2 text-2xl ${localStorage.getItem("token") ? "lg:flex" : "hidden"} cursor-pointer`}
         >
-          <img
-            className="w-10 rounded-full"
-            src="https://th.bing.com/th/id/OIP.Wq6Kq_DS5JVcBUCIVD5JyQAAAA?w=217&h=216&c=7&r=0&o=5&dpr=1.3&pid=1.7"
-            alt="not fould"
-          ></img>
-          <span>{user.lastname + " " + user.firstname}</span>
+          <div
+            className="flex items-center gap-3"
+            onClick={() => setDisplayMenu(!displayMenu)}
+          >
+            <img
+              className="w-10 rounded-full"
+              src="https://th.bing.com/th/id/OIP.Wq6Kq_DS5JVcBUCIVD5JyQAAAA?w=217&h=216&c=7&r=0&o=5&dpr=1.3&pid=1.7"
+              alt="not fould"
+            ></img>
+            <span>{user.lastname + " " + user.firstname}</span>
+          </div>
+          {user.role === "student" && (
+            <div className="relative">
+              <FiShoppingCart size={25} color="white" />
+              <p className="absolute right-[-30%] top-[-25%] rounded-full bg-white px-2">
+                2
+              </p>
+            </div>
+          )}
           <menu
             className={`absolute top-[100%] z-30 h-auto w-[200px] bg-white ${displayMenu ? "block" : "hidden"} overflow-hidden rounded-md`}
           >
             <ul>
-              <li className="p-4 hover:bg-slate-100">
+              <li
+                onClick={() => setDisplayMenu(false)}
+                className="p-4 hover:bg-slate-100"
+              >
                 <Link to={"info"}>Thông Tin Sinh Viên</Link>
               </li>
               <li className="p-4 hover:bg-slate-100">Báo Cáo</li>
@@ -191,3 +213,5 @@ export default function Navbar() {
     </div>
   );
 }
+
+export default memo(Navbar);

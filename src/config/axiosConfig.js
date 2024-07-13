@@ -1,4 +1,5 @@
 import axios from "axios";
+import { logOut } from "~/api/authAPI";
 // import "dotenv/config";
 
 const instance = axios.create({
@@ -26,8 +27,11 @@ instance.interceptors.response.use(
   (error) => {
     if (error.response.status === 401) {
       window.location.href = "signin";
+      logOut();
     }
     console.log(error);
+    // window.location.href = "signin";
+
     return Promise.reject(error);
   },
 );

@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import {
   Listbox,
   ListboxButton,
@@ -14,8 +14,7 @@ function classNames(...classes) {
 }
 
 function Select({ form, setForm }) {
-  // const [selected, setSelected] = useState(cate[0]);
-  // console.log(form.cate);
+  const [selected, setSelected] = useState(cate[0]);
   return (
     <Listbox
       onChange={(value) => setForm((prev) => ({ ...prev, category: value }))}

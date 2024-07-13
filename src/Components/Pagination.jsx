@@ -1,20 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useQuery } from "~/hooks/useQuery";
 
-const Pagination = ({ limit, count }) => {
+import { FaChevronLeft } from "react-icons/fa6";
+import { FaChevronRight } from "react-icons/fa6";
+
+const Pagination = ({ currentPage, limit, count }) => {
   const totalPages = Math.ceil(count / limit);
-  const [currentPage, setCurrentPage] = useState(1);
+  const searchParams = useQuery();
+  // const currentPage = searchParams.get("page");
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleChangePage = (page) => {
     if (page >= 1 && page <= totalPages) {
-      const searchParams = new URLSearchParams(location.search);
       searchParams.set("page", page);
       const newSearch = searchParams.toString();
       navigate(`${location.pathname}?${newSearch}`);
-      setCurrentPage(page);
+      // setCurrentPage(page);
     }
   };
 
@@ -27,7 +31,7 @@ const Pagination = ({ limit, count }) => {
         className="rounded-md bg-gray-200 px-4 py-2 text-gray-700"
         disabled={currentPage === 1}
       >
-        Previous
+        <FaChevronLeft />
       </button>
       {[...Array(totalPages).keys()].map((_, index) => (
         <button
@@ -47,7 +51,7 @@ const Pagination = ({ limit, count }) => {
         className="rounded-md bg-gray-200 px-4 py-2 text-gray-700"
         disabled={currentPage === totalPages}
       >
-        Next
+        <FaChevronRight />
       </button>
     </div>
   );

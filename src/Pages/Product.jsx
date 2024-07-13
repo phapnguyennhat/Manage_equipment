@@ -1,32 +1,48 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import Footer from "~/Components/Footer";
 import StockCard from "./Depot/StockCard";
 import dataStock from "~/constant/depotConstant";
+import { getEquipByIdAPI } from "~/api/equipAPI";
 const Product = () => {
   // const location = useLocation();
   // const item = location.state.info;
   // console.log(item);
-  const item = {};
+  const { id } = useParams();
 
-  return (
+  const [item, setItem] = useState({});
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setLoading(true);
+    getEquipByIdAPI(id).then((res) => {
+      setItem(res.data);
+    });
+    window.scrollTo(0, 0);
+    setLoading(false);
+  }, [id]);
+
+  return loading ? (
+    <div className="flex h-screen items-center justify-center text-4xl font-bold">
+      Loading...
+    </div>
+  ) : (
     <div className="mx-[30px] lg:mx-[60px]">
       <div className="my-11 flex flex-col gap-20 pb-10 lg:flex-row">
         <div className="hidden flex-col gap-y-7 lg:flex">
           <div className="cursor-pointer overflow-hidden rounded-md border-2 duration-300 hover:border-[#282828]">
-            <img src={item.src} className="w-[150px]" alt="" />
+            <img src={item.urlImg} className="w-[150px]" alt="" />
           </div>
           <div className="cursor-pointer rounded-md border-2 duration-300 hover:border-[#282828]">
-            <img src={item.src} className="w-[150px]" alt="" />
+            <img src={item.urlImg} className="w-[150px]" alt="" />
           </div>
           <div className="cursor-pointer rounded-md border-2 duration-300 hover:border-[#282828]">
-            <img src={item.src} className="w-[150px]" alt="" />
+            <img src={item.urlImg} className="w-[150px]" alt="" />
           </div>
         </div>
         <img
           className="mx-auto w-[90%] lg:w-[50%]"
-          src={item.src}
+          src={item.urlImg}
           alt="not found"
         />
         <div className="mx-auto w-[90%] lg:w-[50%]">
@@ -37,7 +53,7 @@ const Product = () => {
           </p>
           <h3 className="mt-6 text-5xl font-medium">{item.title}</h3>
           <h4 className="mt-6 text-3xl">
-            {`Giá trị bồi thường: ${item.compensate}`}{" "}
+            {`Giá trị bồi thường: ${item.price}`}{" "}
           </h4>
           <p className="my-6 lg:w-[70%]">{item.description}</p>
           <span className="mt-6">Màu: Đen</span>

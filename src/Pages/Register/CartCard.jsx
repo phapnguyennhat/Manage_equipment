@@ -24,7 +24,8 @@ const CartCard = ({ product }) => {
             <FaMinus color="gray" />
             <input
               className="mx-2 w-[50px] text-center outline-none sm:w-[80px]"
-              type="text"
+              type="number"
+              min={1}
             />
             <FaPlus color="gray" />
           </div>
