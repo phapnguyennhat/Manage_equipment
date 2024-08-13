@@ -29,7 +29,7 @@ export const updateEquipAPI = async (form) => {
   return res;
 };
 
-export const getAll = async (page, status, cate, timefrom, timeto) => {
+export const fetchEquipAPI = async (page, status, cate, timefrom, timeto) => {
   if (!page) page = 1;
   let url = `equipment?page=${page}`;
 
@@ -43,8 +43,7 @@ export const getAll = async (page, status, cate, timefrom, timeto) => {
 };
 
 export const getEquipByIdAPI = async (id) => {
-  const response = instance.get(`equipment/${id}`);
-  return response;
+  return instance.get(`equipment/${id}`);
 };
 
 export const deleteEquipByid = async (id) => {

@@ -9,14 +9,17 @@ const Pagination = ({ currentPage, limit, count }) => {
   const totalPages = Math.ceil(count / limit);
   const searchParams = useQuery();
   // const currentPage = searchParams.get("page");
+  // console.log({ currentPage, totalPages });
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleChangePage = (page) => {
+    // console.log({ page });
     if (page >= 1 && page <= totalPages) {
       searchParams.set("page", page);
       const newSearch = searchParams.toString();
+
       navigate(`${location.pathname}?${newSearch}`);
       // setCurrentPage(page);
     }
@@ -39,14 +42,15 @@ const Pagination = ({ currentPage, limit, count }) => {
           onClick={() => {
             handleChangePage(index + 1);
           }}
-          className={`px-4 py-2 ${index + 1 === currentPage ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"} rounded-md`}
+          className={`px-4 py-2 ${index + 1 === parseInt(currentPage) ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"} rounded-md`}
         >
           {index + 1}
         </button>
       ))}
       <button
         onClick={() => {
-          handleChangePage(currentPage + 1);
+          handleChangePage(parseInt(currentPage) + 1);
+          // console.log("next");
         }}
         className="rounded-md bg-gray-200 px-4 py-2 text-gray-700"
         disabled={currentPage === totalPages}

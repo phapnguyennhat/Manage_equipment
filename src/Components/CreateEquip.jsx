@@ -1,14 +1,8 @@
 import React, { memo, useEffect, useState } from "react";
+import { useAddEquip, useUpdateEquip } from "~/hooks/useEquip";
+import Loader from "./Loader";
 
-const CreateEquip = ({
-  display,
-  setDisplayForm,
-  handleAdd,
-  error,
-  equip,
-  handleUpdate,
-  handleClearErr,
-}) => {
+const CreateEquip = ({ display, setDisplayForm, equip }) => {
   const cate = ["Đồ trang trí", "Văn phòng phẩm", "Vật dụng sự kiện", "Khác"];
 
   // const [error, setError] = useState("");
@@ -19,8 +13,24 @@ const CreateEquip = ({
   //   const value = isNaN(e.target.value) ? e.target.value : +e.target.value;
   //   setForm({ ...form, [e.target.name]: value });
   // };
+  const {
+    mutate: addEquip,
+    isError: isErrorAdd,
+    error: errorAdd,
+    isLoading: isLoadingAdd,
+    isSuccess: isSuccessAdd,
+  } = useAddEquip();
+
+  const {
+    mutate: updateEquip,
+    isError: isErrorUpdate,
+    error: errorUpdate,
+    isLoading: isLoadingUpdate,
+    isSuccess: isSuccessUpdate,
+  } = useUpdateEquip();
 
   const [form, setForm] = useState({});
+  const [err, setErr] = useState("");
 
   const handleClose = () => {
     // setForm({});
@@ -29,9 +39,6 @@ const CreateEquip = ({
   };
 
   useEffect(() => {
-    if (display) {
-      handleClearErr();
-    }
     if (equip) {
       setForm(equip);
     } else {
@@ -47,7 +54,7 @@ const CreateEquip = ({
       });
     }
   }, [display]);
-  console.log("rerender...");
+  // console.log("rerender...");
 
   const handleCollectData = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -57,11 +64,19 @@ const CreateEquip = ({
     e.preventDefault();
     if (equip) {
       // console.log("call api");
-      const err = await handleUpdate(form);
+      updateEquip(form);
+      // if (isSuccessUpdate) setDisplayForm(false);
     } else if (!equip) {
-      const err = await handleAdd(form);
+      if (form.file) {
+        addEquip(form);
+      } else {
+        setErr("File is required");
+      }
+      // if (isSuccessAdd) setDisplayForm(false);
     }
   };
+
+  // console.log({ isSuccessAdd, isSuccessUpdate });
 
   return (
     <div
@@ -75,8 +90,18 @@ const CreateEquip = ({
         <h3 className="py-5 text-center text-3xl font-bold">
           Thông Tin Vật Dụng
         </h3>
-        {error ? (
-          <p className="mx-2 my-2 rounded-md bg-red-500 p-4"> {error}</p>
+        {isErrorUpdate ? (
+          <p className="mx-2 my-2 rounded-md bg-red-500 p-4">
+            {errorUpdate?.response.data.message}
+          </p>
+        ) : null}
+        {isErrorAdd ? (
+          <p className="mx-2 my-2 rounded-md bg-red-500 p-4">
+            {errorAdd?.response.data.message}
+          </p>
+        ) : null}
+        {err ? (
+          <p className="mx-2 my-2 rounded-md bg-red-500 p-4">{err}</p>
         ) : null}
         <form
           action="POST"
@@ -121,12 +146,13 @@ const CreateEquip = ({
 
               <select
                 name="category"
+                required
                 onChange={(e) => handleCollectData(e)}
                 // id="HeadlineAct"
                 value={form.category}
                 className="mt-1.5 w-full rounded-lg border-gray-300 text-gray-700 outline-none"
               >
-                <option value="">--DANH MỤC--</option>
+                <option value={""}>--DANH MỤC--</option>
                 {cate.map((item) => {
                   return <option value={item}>{item}</option>;
                 })}
@@ -165,7 +191,7 @@ const CreateEquip = ({
               className="w-full p-3 outline-none"
               type="file"
               accept="image/*"
-              // required
+
               // value={form.file}
             />
 
@@ -195,6 +221,7 @@ const CreateEquip = ({
           </div>
         </form>
       </div>
+      {isLoadingAdd || isLoadingUpdate ? <Loader /> : null}
     </div>
   );
 };

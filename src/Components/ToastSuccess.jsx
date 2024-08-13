@@ -7,13 +7,12 @@ const ToastSuccess = () => {
       <div className="rounded-lg bg-modal p-5">
         <div className="mb-5 flex justify-center">
           {" "}
-          <div className="rounded-full bg-white p-5">
+          <div className="rounded-full bg-green-500 p-5">
             {" "}
-            <FaCheck color="green" size={50} />
+            <FaCheck color="white" size={50} />
           </div>
         </div>
-        <p className="text-center text-2xl text-white md:text-3xl lg:text-4xl">
-          {" "}
+        <p className="select-none text-center text-2xl text-white md:text-3xl lg:text-4xl">
           Vật dụng đã được thêm vào danh sách
         </p>
       </div>

@@ -25,12 +25,12 @@ instance.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response.status === 401) {
-      window.location.href = "signin";
+    if (error.response?.status === 401) {
       logOut();
+      window.location.href = "signin";
+      // window.location.href = "signin";
     }
     console.log(error);
-    // window.location.href = "signin";
 
     return Promise.reject(error);
   },

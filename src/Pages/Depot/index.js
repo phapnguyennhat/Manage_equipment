@@ -6,14 +6,12 @@ import { useEffect, useState } from "react";
 import StockCard from "./StockCard";
 import Footer from "~/Components/Footer";
 import Filter from "./Filter";
-import { profile } from "~/api/authAPI";
 import CreateEquip from "~/Components/CreateEquip";
-import { getAll } from "~/api/equipAPI";
 import Pagination from "~/Components/Pagination";
 import { useQuery } from "~/hooks/useQuery";
-import { useMe } from "~/hooks/useMe";
-import { useEquip } from "~/hooks/useEquip";
+import { useEquipData } from "~/hooks/useEquip";
 import Loader from "~/Components/Loader";
+import { useMe } from "~/hooks/useAuth";
 
 const cx = classNames.bind(styles);
 
@@ -26,30 +24,38 @@ export default function Depot() {
     isOpenColor: false,
     isOpenStock: false,
   });
-
   const query = useQuery();
-  const timefrom = +query.get("timefrom");
-  const timeto = +query.get("timeto");
-  const page = +query.get("page");
+  const timefrom = query.get("timefrom");
+  const timeto = query.get("timeto");
+  const page = query.get("page");
 
   const status = query.get("status");
   const cate = query.get("cate");
 
-  const {
-    data,
-    count,
-    handleDelete,
-    handleAdd,
-    loading,
-    handleUpdate,
-    error,
-    handleClearErr,
-  } = useEquip(page, status, cate, timefrom, timeto);
-
   const [displayForm, setDisplayForm] = useState(false);
 
   const handleAside = () => setDisplayAside(!displayAside);
-  const { user } = useMe();
+  const { data: userData, isError } = useMe();
+
+  let user = userData?.data || {};
+
+  if (isError) {
+    user.role = "";
+  }
+  const { data, isLoading } = useEquipData(
+    page,
+    status,
+    cate,
+    timefrom,
+    timeto,
+  );
+  // console.log({ data });
+  const listEquip = data?.data.data || [];
+  const count = data?.data.count || 0;
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
 
   return (
     <div className="px-6 md:px-[45px]">
@@ -143,15 +149,15 @@ export default function Depot() {
         )}
       </div>
       <div className="grid min-h-screen grid-cols-2 gap-x-10 gap-y-2 md:grid-cols-3 lg:grid-cols-4">
-        {data.map((product, index) => (
+        {listEquip.map((product, index) => (
           <StockCard
             product={product}
             key={index}
-            handleAdd={handleAdd}
-            handleDelete={handleDelete}
-            handleUpdate={handleUpdate}
-            error={error}
-            handleClearErr={handleClearErr}
+            // handleAdd={handleAdd}
+            // handleDelete={handleDelete}
+            // handleUpdate={handleUpdate}
+            // error={error}
+            // handleClearErr={handleClearErr}
           />
         ))}
       </div>
@@ -159,16 +165,16 @@ export default function Depot() {
         Hiển thị 1-12 của 28 sản phẩm
         <button className="btn-filter mx-auto w-[200px]">Hiển thị thêm</button>
       </div> */}
-      <Pagination currentPage={page} count={count} limit={12} />
+      <Pagination currentPage={page} count={count} limit={8} />
 
       <CreateEquip
         setDisplayForm={setDisplayForm}
         display={displayForm}
-        handleAdd={handleAdd}
-        error={error}
-        handleClearErr={handleClearErr}
+        // handleAdd={handleAdd}
+        // error={error}
+        // handleClearErr={handleClearErr}
       />
-      {loading && <Loader />}
+      {isLoading && <Loader />}
       <Footer />
     </div>
   );

@@ -5,28 +5,54 @@ import Footer from "~/Components/Footer";
 import StockCard from "./Depot/StockCard";
 import dataStock from "~/constant/depotConstant";
 import { getEquipByIdAPI } from "~/api/equipAPI";
+import { useEquipId } from "~/hooks/useEquip";
+import Loader from "~/Components/Loader";
+import { useAddItemCart } from "~/hooks/useCart";
+import ToastSuccess from "~/Components/ToastSuccess";
 const Product = () => {
   // const location = useLocation();
   // const item = location.state.info;
   // console.log(item);
+  const { mutate: addItemCart, isSuccess } = useAddItemCart();
+  const [displayToast, setDisplayToast] = useState(false);
+
+  const handleToast = () => {
+    if (isSuccess) {
+      setDisplayToast(true);
+      setTimeout(() => {
+        setDisplayToast(false);
+      }, 2000);
+    }
+  };
+
   const { id } = useParams();
 
-  const [item, setItem] = useState({});
-  const [loading, setLoading] = useState(false);
+  const { data, isLoading, isError } = useEquipId(id);
+
+  const [quantity, setQuantity] = useState(1);
+
+  const handleQuantity = (quantity) => {
+    if (quantity >= 1 && quantity <= item.avaiQuantity) {
+      setQuantity(quantity);
+    }
+  };
+  const handleChangeQuantity = (quantity) => {
+    if (!isNaN(quantity) && quantity <= item.avaiQuantity) {
+      setQuantity(quantity);
+    }
+  };
+
+  const item = data?.data || {};
+
+  // const [item, setItem] = useState({});
+  // const [loading, setLoading] = useState(false);
   useEffect(() => {
-    setLoading(true);
-    getEquipByIdAPI(id).then((res) => {
-      setItem(res.data);
-    });
-    window.scrollTo(0, 0);
-    setLoading(false);
+    window.scrollTo(0, 0, { smooth: true });
   }, [id]);
 
-  return loading ? (
-    <div className="flex h-screen items-center justify-center text-4xl font-bold">
-      Loading...
-    </div>
-  ) : (
+  if (isError) return <div>Khong tim thay vat dung</div>;
+
+  return (
     <div className="mx-[30px] lg:mx-[60px]">
       <div className="my-11 flex flex-col gap-20 pb-10 lg:flex-row">
         <div className="hidden flex-col gap-y-7 lg:flex">
@@ -53,7 +79,7 @@ const Product = () => {
           </p>
           <h3 className="mt-6 text-5xl font-medium">{item.title}</h3>
           <h4 className="mt-6 text-3xl">
-            {`Giá trị bồi thường: ${item.price}`}{" "}
+            {`Giá trị bồi thường: ${item.price}`}
           </h4>
           <p className="my-6 lg:w-[70%]">{item.description}</p>
           <span className="mt-6">Màu: Đen</span>
@@ -64,26 +90,48 @@ const Product = () => {
           </div>
           <div className="flex gap-x-7">
             <div className="inline-flex items-center rounded-full border-2 p-5">
-              <FaMinus color="gray" />
-              <input
-                className="w-[80px] text-center outline-none"
-                type="text"
+              <FaMinus
+                onClick={() => handleQuantity(parseInt(quantity) - 1)}
+                color="gray"
               />
-              <FaPlus color="gray" />
+              <input
+                className="w-[80px] select-none text-center outline-none"
+                type="text"
+                value={quantity}
+                onChange={(e) => handleChangeQuantity(e.target.value)}
+              />
+              <FaPlus
+                onClick={() => handleQuantity(parseInt(quantity) + 1)}
+                color="gray"
+              />
             </div>
-            <button className="w-full rounded-full bg-black p-5 text-white">
+            <button
+              disabled={item?.avaiQuantity === 0}
+              onClick={() => {
+                addItemCart({ equipId: item.id, quantity: parseInt(quantity) });
+                handleToast();
+              }}
+              className={`w-full select-none rounded-full p-5 text-white ${item?.avaiQuantity === 0 ? "bg-gray-500" : "bg-black"} `}
+            >
               Thêm vào DS
             </button>
           </div>
+          {item?.avaiQuantity === 0 ? (
+            <p className="py-4 text-3xl font-medium text-red-500">
+              Vật dụng không có sẵn
+            </p>
+          ) : null}
         </div>
       </div>
-      <h3 className="mb-9 text-4xl">Vật dụng liên quan</h3>
+      <h3 className="mb-9 text-4xl">Vật dụng khác</h3>
       <div className="grid grid-cols-2 gap-x-10 gap-y-2 md:grid-cols-3 lg:grid-cols-4">
         {dataStock.slice(0, 4).map((product, index) => (
           <StockCard product={product} key={index} />
         ))}
       </div>
+      {isLoading ? <Loader /> : null}
       <Footer />
+      {displayToast ? <ToastSuccess /> : null}
     </div>
   );
 };

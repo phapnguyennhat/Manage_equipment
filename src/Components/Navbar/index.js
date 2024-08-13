@@ -9,27 +9,29 @@ import { CiViewList } from "react-icons/ci";
 import { FaCaretRight } from "react-icons/fa6";
 import { logOut, profile } from "~/api/authAPI";
 import { FiShoppingCart } from "react-icons/fi";
+import useCart, { useCartData } from "~/hooks/useCart";
+import { useMe } from "~/hooks/useAuth";
 
 function Navbar() {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [displayNav, setDisplayNav] = useState(false);
   const [nav2, setNav2] = useState(false);
   const navigate = useNavigate();
-  const [user, setUser] = useState({});
-  useEffect(() => {
-    try {
-      if (localStorage.getItem("token")) {
-        // console.log(localStorage.getItem("token"));
-        profile().then((res) => setUser(res ? res.data : ""));
-      }
-    } catch (err) {
-      logOut();
-      navigate("signin");
-    }
-  }, []);
+
+  const { data, isError } = useMe();
+  if (isError) {
+    logOut();
+  }
+
+  const user = data?.data || {};
+
+  const { data: cartData } = useCartData();
+
+  const count = cartData?.data.count || 0;
+  const cartList = cartData?.data.data || [];
 
   return (
-    <div className="navber-wrapper mx-auto max-w-screen-2xl bg-gradient-to-l from-cyan-500 px-5 py-8 text-base md:px-[45px] lg:px-[50px]">
+    <div className="navber-wrapper mx-auto max-w-screen-2xl select-none bg-gradient-to-l from-cyan-500 px-5 py-8 text-base md:px-[45px] lg:px-[50px]">
       <nav className="mx-3 flex items-center justify-between lg:mx-10">
         <div className="logo text-5xl font-bold md:basis-1/5">
           <Link to="/">
@@ -89,11 +91,62 @@ function Navbar() {
             <span>{user.lastname + " " + user.firstname}</span>
           </div>
           {user.role === "student" && (
-            <div className="relative">
-              <FiShoppingCart size={25} color="white" />
+            <div className="group/cart relative after:absolute after:right-[-5px] after:top-[14px] after:hidden after:border-x-[15px] after:border-y-[10px] after:border-white after:border-l-transparent after:border-r-transparent after:border-t-transparent hover:after:block">
+              <FiShoppingCart
+                size={25}
+                color="white"
+                onClick={() => navigate("register")}
+              />
               <p className="absolute right-[-30%] top-[-25%] rounded-full bg-white px-2">
-                2
+                {count > 9 ? "9+" : count}
               </p>
+              <div className="absolute right-[-30px] top-[130%] z-50 hidden w-[300px] overflow-hidden rounded bg-white shadow-md group-hover/cart:block group-hover/cart:transition-all">
+                {count === 0 ? (
+                  <div>
+                    <img
+                      className="mx-auto"
+                      src="https://th.bing.com/th/id/OIP._N5W1BJ8s97nmaOz5XRBcwHaHa?w=190&h=190&c=7&r=0&o=5&dpr=1.3&pid=1.7"
+                      alt="not found"
+                    ></img>
+                    <p className="text-1xl text-center font-medium text-gray-500">
+                      Không có vật dụng trong danh sách
+                    </p>
+                  </div>
+                ) : (
+                  <ul>
+                    {cartList.slice(0, 4).map((item) => (
+                      <li
+                        onClick={() =>
+                          navigate(`depot/product/${item.equipId}`)
+                        }
+                        className="flex items-center justify-between px-4 py-2 hover:bg-gray-200"
+                      >
+                        <div className="flex items-center justify-center gap-4">
+                          <img
+                            className="w-[50px]"
+                            alt="not found"
+                            src={item.equip.urlImg}
+                          />
+                          <span className="text-2xl text-gray-500">
+                            {item.equip.title}
+                          </span>
+                        </div>
+                        <span className="text-2xl text-gray-500">
+                          x {item.quantity}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <div className="flex justify-center px-4 py-4">
+                  <button
+                    onClick={() => navigate("/register")}
+                    className="rounded bg-blue-400 p-4 hover:bg-blue-600"
+                  >
+                    Xem Thêm
+                  </button>
+                </div>
+              </div>
             </div>
           )}
           <menu
@@ -129,7 +182,7 @@ function Navbar() {
             <FiAlignJustify size={20} />
           </button>
           <nav
-            className={`absolute right-0 top-[100%] h-auto w-[260px] cursor-pointer bg-white text-2xl ${displayNav ? "block" : "hidden"} overflow-hidden rounded-md`}
+            className={`absolute right-0 top-[100%] z-50 h-auto w-[260px] cursor-pointer bg-white text-2xl ${displayNav ? "block" : "hidden"} overflow-hidden rounded-md`}
           >
             <div
               onClick={() => setNav2(!nav2)}

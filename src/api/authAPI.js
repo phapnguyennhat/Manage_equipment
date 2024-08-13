@@ -6,8 +6,7 @@ export const loginAPI = async (username, password) => {
 };
 
 export const signInAPI = async (form) => {
-  const res = await instance.post("auth/signup", form);
-  return res;
+  return instance.post("auth/signup", form);
 };
 
 export const logOut = async () => {
@@ -16,8 +15,9 @@ export const logOut = async () => {
 
 export const profile = async () => {
   try {
-    const res = await instance.get("auth/profile");
-    return res;
+    if (localStorage.getItem("token")) {
+      return instance.get("auth/profile");
+    }
   } catch (err) {
     logOut();
   }

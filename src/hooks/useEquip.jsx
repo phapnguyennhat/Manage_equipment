@@ -1,101 +1,55 @@
-import React, { useCallback, useEffect, useState } from "react";
+import {
+  InfiniteQueryObserver,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 import {
   createEquip,
   deleteEquipByid,
-  getAll,
+  fetchEquipAPI,
+  getEquipByIdAPI,
   updateEquipAPI,
 } from "~/api/equipAPI";
 
-export const useEquip = (page, status, cate, timefrom, timeto) => {
-  const [data, setData] = useState([]);
-  const [count, setCount] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+export const useEquipData = (page, state, cate, timefrom, timeto) => {
+  return useQuery(
+    ["equip", page, state, cate, timefrom, timeto],
+    () => fetchEquipAPI(page, state, cate, timefrom, timeto),
+    { keepPreviousData: true, staleTime: 60000 },
+  );
+};
 
-  const getAllEquip = async (page, status, cate, timefrom, timeto) => {
-    const res = await getAll(page, status, cate, timefrom, timeto);
-    if (res && res.data) {
-      setLoading(true);
-      setData(res.data.data);
-      setCount(res.data.count);
-      setLoading(false);
-    }
-  };
+export const useEquipId = (equipId) => {
+  return useQuery(["equip", equipId], () => getEquipByIdAPI(equipId), {
+    refetchOnWindowFocus: false,
+    staleTime: 60000,
+  });
+};
 
-  const handleDelete = async (id) => {
-    setLoading(true);
-    setError("");
-    try {
-      await deleteEquipByid(id);
-      setData(data.filter((item) => item.id !== id));
-    } catch (error) {
-      const mess = error?.response?.data?.message || "";
-      setError(Array.isArray(mess) ? mess[0] : mess);
-    }
-    setLoading(false);
-    return error;
-  };
+export const useAddEquip = () => {
+  const queryClient = useQueryClient();
+  return useMutation(createEquip, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("equip");
+    },
+  });
+};
 
-  const handleAdd = async (form) => {
-    // console.log(form);
-    setLoading(true);
-    setError("");
-    if (form.file && !form.file.type.startsWith("image/")) {
-      setError("Vui lòng tải file ảnh");
-    } else if (!form.file) {
-      setError("Vui lòng tải file ảnh");
-    } else {
-      try {
-        const res = await createEquip(form);
-        setData([res.data, ...data]);
-      } catch (error) {
-        const mess = error?.response?.data?.message || "";
-        setError(Array.isArray(mess) ? mess[0] : mess);
-      }
-    }
-    setLoading(false);
-    return error;
-  };
+export const useUpdateEquip = () => {
+  const queryClient = useQueryClient();
+  return useMutation(updateEquipAPI, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("equip");
+    },
+  });
+};
 
-  const handleUpdate = async (form) => {
-    setLoading(true);
-    setError("");
-    if (form.file && !form.file.type.startsWith("image/")) {
-      setError("Vui lòng tải file ảnh");
-    } else {
-      try {
-        const res = await updateEquipAPI(form);
-        const updatedata = data.map((item) => {
-          if (item.id === form.id) return res.data;
-          return item;
-        });
-        setData(updatedata);
-      } catch (error) {
-        const mess = error?.response?.data?.message || "";
-        setError(Array.isArray(mess) ? mess[0] : mess);
-      }
-    }
-    setLoading(false);
-    return error;
-  };
-
-  const handleClearErr = () => {
-    setError("");
-  };
-
-  useEffect(() => {
-    getAllEquip();
-    window.scrollTo(0, 0);
-  }, [page, status, cate, timefrom, timeto]);
-
-  return {
-    data,
-    count,
-    handleDelete,
-    handleAdd,
-    loading,
-    handleUpdate,
-    error,
-    handleClearErr,
-  };
+export const useDeleteEquip = () => {
+  const queryClient = useQueryClient();
+  return useMutation(deleteEquipByid, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("equip");
+    },
+  });
 };
